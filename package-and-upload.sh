@@ -1,12 +1,18 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 APP=$1
-LOCATION=$2
+SERVER=$2
+LOCATION=$3
+REMOTE_PATH=/home/tvster/app
 
 if [ -z "$LOCATION" ]; then
- LOCATION=./app/$APP
+ LOCATION=$DIR/app
 fi
 
-tar czf $APP.tar.gz $LOCATION
-scp $APP.tar.gz tvster@tvster01:~/
+echo $LOCATION
+cd $LOCATION
+tar czf $APP.tar.gz $APP
+scp $APP.tar.gz tvster@$SERVER:/tmp
 rm $APP.tar.gz
