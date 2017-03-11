@@ -3,8 +3,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 APP=$1
+
+# SSH user and server (must have passwordless sudo)
 USER=$2
 SERVER=$3
+
 LOCATION=$4
 
 if [ -z "$LOCATION" ]; then

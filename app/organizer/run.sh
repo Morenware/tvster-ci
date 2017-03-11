@@ -18,4 +18,4 @@ IMAGE_TO_PULL=dfernandez/tvster:$TAG
 docker rm $APP_NAME -f
 
 # Start new one
-docker run --name $APP_NAME -v /mediacenter:/tmp -p 9092:$PORT -d $IMAGE_TO_PULL
+docker run --name $APP_NAME -v /mediacenter:/mediacenter -p 9092:$PORT -d $IMAGE_TO_PULL

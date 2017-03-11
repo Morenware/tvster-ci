@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# tvster-api, mysql, tvster-organizer, tvster-organizer-base-rpi, tvster-organizer-base-x86
 APP=$1
+
+# Docker username and password, dfernandez/XXXX
 USERNAME=$2
 PASSWORD=$3
+
+# Version
 TAG=$4
 
 docker login --username=$USERNAME --password=$PASSWORD
