@@ -1,4 +1,4 @@
-FROM dfernandez/tvster:organizer-base-x86-v1.0.0
+FROM dfernandez/tvster:organizer-base-x86-v1.0.1
 ENV TVSTER_MODE organizer
 
 RUN apt-get -y install xz-utils

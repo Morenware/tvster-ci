@@ -14,6 +14,7 @@ ADD transmission-daemon-defaults $INSTALL_DIR/
 RUN mkdir -p /opt/software/logs/transmission \
     mkdir -p /var/lib/transmission-daemon/info
 RUN cp $INSTALL_DIR/transmission-daemon-defaults /etc/default/
+RUN mv /etc/default/transmission-daemon-defaults /etc/default/transmission-daemon
 RUN cp $INSTALL_DIR/settings.json /var/lib/transmission-daemon/info
 RUN /etc/init.d/transmission-daemon start
 
