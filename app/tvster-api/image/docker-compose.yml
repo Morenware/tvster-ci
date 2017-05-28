@@ -1,0 +1,33 @@
+version: '2.1'
+services:
+  web:
+    image: "dfernandez/tvster:tvster-api-${API_VERSION}"
+    ports:
+      - "4000:4000"
+      - "5858:5858"
+    volumes:
+      - ~/tvster/config:/app/config
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - USERNAME # For basic auth tvster-api
+      - PASSWORD
+    depends_on:
+      mysql:
+        condition: service_healthy
+    links:
+      - mysql:mysql
+    mem_limit: 400m
+    cpu_quota: 150000
+    restart: always
+  mysql:
+    image: dfernandez/tvster:mysql-5.6
+    ports:
+      - "3306:3306"
+    volumes:
+      - ~/tvster/mysql-data:/var/lib/mysql
+      - ~/tvster/mysql/startup:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true

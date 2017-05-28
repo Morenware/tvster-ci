@@ -6,15 +6,24 @@ usage() {
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-APP=$1
-TAG=$2 || v1
-BUILD_PATH=$3
+APP=tvster-api
+VERSION=$1
+BUILD_PATH=$2
+MYSQL_PASSWORD=$3 || ""
+MYSQL_USER_PASS="root:$MYSQL_PASSWORD"
 
-if [ -z "$BUILD_PATH" ]; then
- LOCATION=./app/$APP
+if [ -z ${MYSQL_PASSWORD} ]; then
+    MYSQL_USER_PASS="root"
 fi
 
-cd $BUILD_PATH
+export API_IMAGE=dfernandez/tvster:$APP-$VERSION
+
+# Externalized config
+mkdir -p ~/tvster/config
+
+cd ${BUILD_PATH}
 ./build-client.sh
-cd $DIR
-docker build --build-arg DB_URL=mysql://root:root@localhost:3306/tvster -t tvster/$APP:$TAG $BUILD_PATH
+cp $BUILD_PATH/build/awsCreds.sh /tmp/
+
+cd ${DIR}
+docker build --build-arg DB_URL=mysql://${MYSQL_USER_PASS}@mysql:3306/tvster -t $API_IMAGE $BUILD_PATH

@@ -12,6 +12,6 @@ EXPOSED_PORT=$3 || 3308
 mkdir -p /tmp/mysql-startup
 cp $DIR/startup/tvster-init.sql /tmp/mysql-startup
 mkdir -p /home/tvster/mysql-data
-docker run --name tvster-mysql -v /home/tvster/mysql-data:/var/lib/mysql -v /tmp/mysql-startup:/docker-entrypoint-initdb.d \
+docker run --name tvster-mysql -v /opt/tvster/mysql-data:/var/lib/mysql -v /tmp/mysql-startup:/docker-entrypoint-initdb.d \
 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=$ROOT_PASSWORD -p $EXPOSED_PORT:3306 -d mysql/mysql-server:${IMAGE_TAG} --character-set-server=utf8mb4 \
 --collation-server=utf8mb4_unicode_ci
