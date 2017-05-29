@@ -2,40 +2,34 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-export API_VERSION=$1
-PREPARE_MYSQL=$2
-API_AWS_CREDS=$3
+export API_VERSION=v1.0.0-RC1
+API_AWS_CREDS_SCRIPT=$1
 
 # We export here so these vars can be read from docker-compose.yml environment variables
-export USERNAME=$4
-export PASSWORD=$5
+export USERNAME=$2
+export PASSWORD=$3
+
+COPY_DOCKER_COMPOSE_YML=false
+DOCKER_COMPOSE_YML_PATH=$DIR/app/tvster-api/image/docker-compose.yml
 
 APP=tvster-api
 PORT=4000
 
-if [ -z "$API_VERSION" ]; then
-  export API_VERSION=$(cat $DIR/app/tvster-api/BUILD)
-fi
-
-if [ -n $PREPARE_MYSQL ] && [ $PREPARE_MYSQL = true ]; then
-  echo "Preparing MySQL volumes..."
-  $DIR/prepare-mysql.sh true
-fi
-
 echo "Running version $API_VERSION"
-cp ${DIR}/app/tvster-api/image/docker-compose.yml .
+if [ $COPY_DOCKER_COMPOSE_YML = true ]; then
+    cp $DOCKER_COMPOSE_YML_PATH .
+fi
 
-echo "AWS Credentials path $API_AWS_CREDS"
+echo "Sourcing AWS Credentials path $API_AWS_CREDS_SCRIPT"
+
 # Sourcing here AWS credentials (that need to exported as ENVVARS in whichever script is invoked here)
 # , these vars are injected into ENV of container
-. $API_AWS_CREDS
+. $API_AWS_CREDS_SCRIPT
 
 # Kill current
 docker-compose down
 
 # Start new one
 docker-compose up
-
-rm $DIR/docker-compose.yml
 
 

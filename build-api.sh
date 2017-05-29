@@ -2,23 +2,20 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-API_VERSION=$1
+API_VERSION=$(cat ${DIR}/app/tvster-api/BUILD)
 
 # Path to the codebase of tvster-api
-API_BUILDPATH=$2
-PUSH_IMAGES=false
+API_BUILDPATH=$1
+PUSH_IMAGES=true
 
 # Build MySQL Docker image
-# $DIR/app/mysql/image/build.sh
+echo "Building MySQL image..."
+$DIR/app/mysql/image/build.sh
 
 # Build API Docker image
-echo "$API_BUILDPATH"
-$DIR/app/tvster-api/image/build.sh $API_VERSION $API_BUILDPATH
+echo "Building API version $API_VERSION from build path $API_BUILDPATH"
+$DIR/app/tvster-api/image/build.sh ${API_VERSION} ${API_BUILDPATH}
 
 if [ ${PUSH_IMAGES} = true ]; then
-    $DIR/login-docker.sh
-
-    # Exported from build scripts
-    docker push $MYSQL_IMAGE
-    docker push $API_IMAGE
+    $DIR/push-api-images.sh
 fi
